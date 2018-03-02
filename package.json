@@ -1,0 +1,19 @@
+{
+  "name": "mealsplit",
+  "version": "1.0.0",
+  "description": "split meals the easy way",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisRaveendra/mealSplit.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChrisRaveendra/mealSplit/issues"
+  },
+  "homepage": "https://github.com/ChrisRaveendra/mealSplit#readme"
+}
