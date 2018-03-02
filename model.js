@@ -14,7 +14,7 @@ var itemSchema = mongoose.Schema({
   }
 });
 var mealSchema = mongoose.Schema({   //think of each meal model as a transaction
-  items: {        //array of items
+  items: {        //array of item _ids
     type: Array,
     required: true
   },
@@ -44,10 +44,10 @@ var userSchema = mongoose.Schema({
     type: Number,
     required: true
   },
-  balance: { 
+  balance: {
     type: Number
   },
-  meals:{  //transactions
+  meals:{  //transactions Array of meal id's
     type: Array
   }
 });
