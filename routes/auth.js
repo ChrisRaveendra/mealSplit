@@ -33,7 +33,7 @@ module.exports = function(passport) {
           return;
         }
         console.log(user);
-        res.status(200).redirect('/contacts');
+        res.json({});
       })
     }else{
       console.log("invalid entry");
