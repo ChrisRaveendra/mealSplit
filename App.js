@@ -32,7 +32,7 @@ import {   StyleSheet,
             <Text style={styles.buttonLabel}>Tap to Register</Text>
           </TouchableOpacity>
         </View>
-      )
+      );
     }
   }
 
