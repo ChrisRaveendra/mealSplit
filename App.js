@@ -1,4 +1,5 @@
 import React from 'react';
+import {render} from 'react-dom';
 import {   StyleSheet,
   View,
   Text,
@@ -10,21 +11,21 @@ import {   StyleSheet,
   AsyncStorage } from 'react-native';
   import { StackNavigator } from 'react-navigation';
 
-  class LoginScreen extends React.Component{
+  class WelcomeScreen extends React.Component{
     static navigationOptions = {
-      title: 'Login'
+      title: 'Welcome'
     };
     register() {
       this.props.navigation.navigate('Register');
     }
     press() {
-      this.props.navigation.navigate('Login2');
+      this.props.navigation.navigate('Login');
     }
     render() {
       return (
         <View style={styles.container}>
-          <Text style={styles.textBig}>Login to MealSplit!</Text>
-          <TouchableOpacity onPress={ () => {this.press()} } style={[styles.button, styles.buttonGreen]}>
+          <Text style={styles.textBig}>Welcome to MealSplit!</Text>
+          <TouchableOpacity onPress={ () => {this.press()} } style={styles.button}>
             <Text style={styles.buttonLabel}>Tap to Login</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={ () => {this.register()} }>
@@ -46,12 +47,15 @@ import {   StyleSheet,
     static navigationOptions = {
       title: 'Register'
     };
+    registerButton() {
+      this.props.navigation.navigate('MealSplit');
+    }
     render() {
       return (
         <View style={styles.container}>
           <TextInput style={{height: 40, width: '95%', borderWidth: 0.5, borderColor: 'black', marginBottom: 10, paddingLeft: 10}} type="text" placeholder="Username" value={this.state.username} onChangeText={(text) => this.setState({username: text})}/>
           <TextInput style={{height: 40, width: '95%', borderWidth: 0.5, borderColor: 'black', paddingLeft: 10}} secureTextEntry={true} placeholder="Password" value={this.state.password} onChangeText={(text) => this.setState({password: text})}/>
-          <TouchableOpacity style={[styles.button, styles.buttonRed]} onPress={ () => {this.registerButton()} }>
+          <TouchableOpacity style={styles.button} onPress={ () => {this.registerButton()} }>
             <Text style={styles.buttonLabel}>Register</Text>
           </TouchableOpacity>
         </View>
@@ -59,7 +63,7 @@ import {   StyleSheet,
     }
   }
 
-  class LoginPart2Screen extends React.Component {
+  class LoginScreen extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -68,14 +72,19 @@ import {   StyleSheet,
       }
     }
     static navigationOptions = {
-      title: 'Login2'
+      title: 'Login'
     };
+
+    registerButton() {
+      this.props.navigation.navigate('MealSplit');
+    }
+
     render() {
       return (
         <View style={styles.container}>
           <TextInput style={{height: 40, width: '95%', borderWidth: 0.5, borderColor: 'black', marginBottom: 10, paddingLeft: 10}} type="text" placeholder="Username" value={this.state.username} onChangeText={(text) => this.setState({username: text})}/>
           <TextInput style={{height: 40, width: '95%', borderWidth: 0.5, borderColor: 'black', paddingLeft: 10}} secureTextEntry={true} placeholder="Password" value={this.state.password} onChangeText={(text) => this.setState({password: text})}/>
-          <TouchableOpacity style={[styles.button, styles.buttonRed]} onPress={ () => {this.registerButton()} }>
+          <TouchableOpacity style={styles.button} onPress={ () => {this.registerButton()} }>
             <Text style={styles.buttonLabel}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -83,19 +92,53 @@ import {   StyleSheet,
     }
   }
 
+
+class MainScreen extends React.Component {
+    constructor(props){
+      super(props);
+      this.state = {
+        items: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'],
+        dataSource: new ListView.DataSource({
+          rowHasChanged: (row1, row2) => row1 !== row2}).cloneWithRows(['string1', 'string2', 'string3']), 
+      };
+  }
+
+  static navigationOptions = {
+    title: 'MealSplit'
+  }
+
+  renderRow(items) {
+    return (
+      <Text>{items}</Text>
+    );
+  }
+  render() {
+    return (
+      <ListView
+      style={{margin: 40}}
+      dataSource={this.state.dataSource}
+      renderRow={this.renderRow}
+      />
+    );
+  }
+}
+
   export default StackNavigator({
-    Login: {
-      screen: LoginScreen,
+    Welcome: {
+      screen: WelcomeScreen,
     },
     Register: {
       screen: RegisterScreen,
     },
-    Login2: {
-      screen: LoginPart2Screen,
+    Login: {
+      screen: LoginScreen,
       
+    },
+    MealSplit: {
+      screen: MainScreen,
     }
 
-  }, {initialRouteName: 'Login'});
+  }, {initialRouteName: 'Welcome'});
 
   //StyleSheet
   const styles = StyleSheet.create({
@@ -103,15 +146,16 @@ import {   StyleSheet,
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#F5FCFF',
+      backgroundColor: '#0066ff80',
       margin: 10,
       borderRadius: 5,
+      fontFamily: 'Copperplate-Bold'
     },
     container1: {
       flex: 1,
       justifyContent: 'center',
       //alignItems: 'center',
-      backgroundColor: '#F5FCFF',
+      backgroundColor: '#F5FCFF80',
       borderRadius: 5,
       borderColor:"black",
       borderWidth:.5,
@@ -137,6 +181,7 @@ import {   StyleSheet,
       fontSize: 36,
       textAlign: 'center',
       margin: 10,
+      color: 'white'
     },
     button: {
       alignSelf: 'stretch',
@@ -145,16 +190,8 @@ import {   StyleSheet,
       marginTop: 10,
       marginLeft: 5,
       marginRight: 5,
-      borderRadius: 5
-    },
-    buttonRed: {
-      backgroundColor: '#FF585B',
-    },
-    buttonBlue: {
-      backgroundColor: '#0074D9',
-    },
-    buttonGreen: {
-      backgroundColor: '#2ECC40'
+      borderRadius: 5,
+      backgroundColor: '#cce0ff'
     },
     buttonLabel: {
       textAlign: 'center',
