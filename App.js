@@ -146,7 +146,9 @@ class MainScreen extends React.Component {
     constructor(props){
       super(props);
       this.state = {
-        dataSource: new ListView.DataSource({
+        contactsDataSource: new ListView.DataSource({
+          rowHasChanged: (row1, row2) => row1 !== row2}).cloneWithRows(['string1', 'string2', 'string3']),
+        itemsDataSource: new ListView.DataSource({
           rowHasChanged: (row1, row2) => row1 !== row2}).cloneWithRows(['string1', 'string2', 'string3']),
       };
   }
@@ -155,7 +157,6 @@ class MainScreen extends React.Component {
     title: 'MealSplit'
   }
   componentDidMount(){
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     fetch('http://10.2.110.91:3000/contacts', {
       method: 'GET',
       credentials: 'include'
@@ -164,22 +165,44 @@ class MainScreen extends React.Component {
     .then(respJson => {
       console.log(respJson)
       this.setState({
-        dataSource: ds.cloneWithRows(respJson)
+        contactsDataSource: this.state.contactsDataSource.cloneWithRows(respJson)
       })
     })
     .catch(err=>console.log(err))
-    
+
+    fetch('http://10.2.110.91:3000/items', {
+      method: 'GET',
+      credentials: 'include'
+    })
+    .then((resp) => resp.json())
+    .then(respJson => {
+      console.log(respJson)
+      this.setState({
+        itemsDataSource: this.state.itemsDataSource.cloneWithRows(respJson)
+      })
+    })
+    .catch(err=>console.log(err))
+
   }
 
   render() {
     return (
       <View>
-      {this.state.dataSource?
+      {this.state.contactsDataSource?
     <ListView
-        dataSource={this.state.dataSource}
+        dataSource={this.state.contactsDataSource}
         renderRow={(rowData) => (
           <TouchableOpacity>
             <Text style={styles.buttonLabel1}>{rowData.username}</Text>
+          </TouchableOpacity>
+        )}
+      />:null}
+      {this.state.itemsDataSource?
+    <ListView
+        dataSource={this.state.itemsDataSource}
+        renderRow={(rowData) => (
+          <TouchableOpacity style={{alignItems:'center'}}>
+            <Text style={styles.button2}>item:{rowData.name} plus tax and tip - ${(rowData.price*1.18*1.18).toFixed(2)}</Text>
           </TouchableOpacity>
         )}
       />:null}
@@ -259,6 +282,15 @@ class MainScreen extends React.Component {
       borderRadius: 5,
       backgroundColor: '#cce0ff'
     },
+    button2: {
+      alignSelf: 'flex-start',
+      paddingTop: 10,
+      paddingBottom: 10,
+      margin: 5,
+      borderRadius: 7,
+      //height:5,
+      backgroundColor: '#cce0ff'
+    },
     buttonLabel: {
       textAlign: 'center',
       fontSize: 16,
@@ -266,6 +298,15 @@ class MainScreen extends React.Component {
     },
     buttonLabel1: {
       textAlign: 'center',
+      fontSize: 16,
+      color: 'black',
+      borderColor:'black',
+      borderWidth: 0.5,
+      paddingTop: 10,
+      paddingBottom: 10,
+    },
+    buttonLabel2: {
+      textAlign: 'left',
       fontSize: 16,
       color: 'black',
       borderColor:'black',
