@@ -10,6 +10,7 @@ import {   StyleSheet,
   Button,
   AsyncStorage } from 'react-native';
   import { StackNavigator } from 'react-navigation';
+  import CheckBox from 'react-native-checkbox';
 
   class WelcomeScreen extends React.Component{
     static navigationOptions = {
@@ -118,7 +119,13 @@ class MainScreen extends React.Component {
       style={{margin: 40}}
       dataSource={this.state.dataSource}
       renderRow={this.renderRow}
+
+      // <CheckBox
+      //   label='Gratuity Added?'
+      //   checked={true}
+      //   onChange={(checked) => console.log('I am checked', checked)}
       />
+      
     );
   }
 }

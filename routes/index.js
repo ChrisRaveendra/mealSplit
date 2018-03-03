@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var User=require("../models/models.js").User;
+
+
 router.get('/contacts', function(req, res, next) {
   // Your code here.
   console.log(req.user._id)
@@ -14,4 +16,6 @@ router.get('/contacts', function(req, res, next) {
     })
   })
 });
+
+
 module.exports = router;
