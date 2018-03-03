@@ -36,18 +36,21 @@ var mealSchema = mongoose.Schema({   //think of each meal model as a transaction
   }
 });
 var userSchema = mongoose.Schema({
-  name: {
+  username: {
     type: String,
     required: true
   },
   password: {
-    type: Number,
+    type: String,
     required: true
   },
   balance: {
     type: Number
   },
   meals:{  //transactions Array of meal id's
+    type: Array
+  },
+  contacts:{
     type: Array
   }
 });
