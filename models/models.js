@@ -11,15 +11,19 @@ var itemSchema = mongoose.Schema({
   },
   ratio: {   //for items that are shared
     type: Number,
+  },
+  paidby:{
+    type: String,
+    required: true
+  },
+  indebt:{
+    type:String,
+    required: true
   }
 });
 var mealSchema = mongoose.Schema({   //think of each meal model as a transaction
   items: {        //array of item _ids
     type: Array,
-    required: true
-  },
-  total: {
-    type: Number,
     required: true
   },
   master:{
@@ -47,7 +51,7 @@ var userSchema = mongoose.Schema({
   balance: {
     type: Number
   },
-  meals:{  //transactions Array of meal id's
+  items:{  //transactions Array of meal id's
     type: Array
   },
   contacts:{

@@ -58,14 +58,18 @@ router.post('/items', function(req, res, next) {
   // Your code here.
   var newItem= new Item({
     name:req.body.name,
-    price:req.body.price
+    price:req.body.price,
+    paidby:req.user._id,
+    indebt:req.body.user
   })
-  newItem.save(function(err, item) {
+  newItem.save(function(err, _res) {
     if (err) {
       console.log(err);
       return;
     }
-    res.json({});
+    console.log('reached');
+    res.send({})
   })
 });
+
 module.exports = router;
