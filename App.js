@@ -8,8 +8,15 @@ import {   StyleSheet,
   ListView,
   Alert,
   Button,
-  AsyncStorage } from 'react-native';
+  AsyncStorage,
+
+  PanResponder,
+  Animated,
+  Dimensions} from 'react-native';
   import { StackNavigator } from 'react-navigation';
+
+var ip = 'http://10.2.110.115:3000'
+  // http://10.2.110.91:3000
 
   class WelcomeScreen extends React.Component{
     static navigationOptions = {
@@ -51,7 +58,7 @@ import {   StyleSheet,
       if (this.state.username === '' || this.state.password === '') {
         alert('Invalid username or password.')
       } else {
-        fetch('http://10.2.110.91:3000/signup', {
+        fetch(`${ip}/signup`, {
           method: 'POST',
           headers: {
             "Content-Type": "application/json"
@@ -103,7 +110,7 @@ import {   StyleSheet,
       if (this.state.username === '' || this.state.password === '') {
         alert('Invalid username or password.')
       } else {
-        fetch('http://10.2.110.91:3000/login', {
+        fetch(`${ip}/login`, {
           method: 'POST',
           headers: {
             "Content-Type": "application/json"
@@ -150,14 +157,24 @@ class MainScreen extends React.Component {
           rowHasChanged: (row1, row2) => row1 !== row2}).cloneWithRows(['string1', 'string2', 'string3']),
         itemsDataSource: new ListView.DataSource({
           rowHasChanged: (row1, row2) => row1 !== row2}).cloneWithRows(['string1', 'string2', 'string3']),
+        pan: new Animated.ValueXY()   //Step 1
       };
+
+      this.panResponder = PanResponder.create({    //Step 2
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderMove: Animated.event([null, { //Step 3
+          dx: this.state.pan.x,
+          dy: this.state.pan.y
+        }]),
+        onPanResponderRelease: (e, gesture) => { } //Step 4
+      });
   }
 
   static navigationOptions = {
     title: 'MealSplit'
   }
   componentDidMount(){
-    fetch('http://10.2.110.91:3000/contacts', {
+    fetch(`${ip}/contacts`, {
       method: 'GET',
       credentials: 'include'
     })
@@ -170,7 +187,7 @@ class MainScreen extends React.Component {
     })
     .catch(err=>console.log(err))
 
-    fetch('http://10.2.110.91:3000/items', {
+    fetch(`${ip}/items`, {
       method: 'GET',
       credentials: 'include'
     })
@@ -188,29 +205,31 @@ class MainScreen extends React.Component {
   render() {
     return (
       <View>
-      {this.state.contactsDataSource?
-    <ListView
-        dataSource={this.state.contactsDataSource}
-        renderRow={(rowData) => (
-          <TouchableOpacity>
-            <Text style={styles.buttonLabel1}>{rowData.username}</Text>
-          </TouchableOpacity>
-        )}
-      />:null}
-      {this.state.itemsDataSource?
-    <ListView
-        dataSource={this.state.itemsDataSource}
-        renderRow={(rowData) => (
-          <TouchableOpacity style={{alignItems:'center'}}>
-            <Text style={styles.button2}>item:{rowData.name} plus tax and tip - ${(rowData.price*1.18*1.18).toFixed(2)}</Text>
-          </TouchableOpacity>
-        )}
-      />:null}
 
-    </View>
+        {this.state.contactsDataSource?
+        <ListView
+            dataSource={this.state.contactsDataSource}
+            renderRow={(rowData) => (
+              <TouchableOpacity>
+                <Text style={styles.buttonLabel1}>{rowData.username}</Text>
+              </TouchableOpacity>
+            )}
+          />:null}
+          {this.state.itemsDataSource?
+          <ListView
+              dataSource={this.state.itemsDataSource}
+              renderRow={(rowData) => (
+                <Animated.View style={{alignItems:'center'}}>
+                  <Text style={styles.button2}>item:{rowData.name} plus tax and tip - ${(rowData.price*1.18*1.18).toFixed(2)}</Text>
+                </Animated.View>
+              )}
+            />:null}
+
+      </View>
     );
   }
 }
+
 
   export default StackNavigator({
     Welcome: {
