@@ -48,7 +48,31 @@ import {   StyleSheet,
       title: 'Register'
     };
     registerButton() {
-      this.props.navigation.navigate('MealSplit');
+      if (this.state.username === '' || this.state.password === '') {
+        alert('Invalid username or password.')
+      } else {
+        fetch('http://10.2.110.91:3000/signup', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            username: this.state.username,
+            password: this.state.password,
+          })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log(responseJson)
+          this.props.navigation.navigate('MealSplit');
+          /* do something with responseJson and go back to the Login view but
+          * make sure to check for responseJson.success! */
+        })
+        .catch((err) => {
+          console.log(err)
+          alert(err.message);
+        });
+      }
     }
     render() {
       return (
@@ -76,7 +100,32 @@ import {   StyleSheet,
     };
 
     registerButton() {
-      this.props.navigation.navigate('MealSplit');
+      if (this.state.username === '' || this.state.password === '') {
+        alert('Invalid username or password.')
+      } else {
+        fetch('http://10.2.110.91:3000/login', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            username: this.state.username,
+            password: this.state.password,
+          })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log(responseJson)
+          this.props.navigation.navigate('MealSplit')
+        })
+        .then(()=>AsyncStorage.setItem('user', JSON.stringify({
+          username: this.state.username,
+          password: this.state.password
+        })))
+        .catch((err) => {
+          alert( err);
+        });
+      }
     }
 
     render() {
@@ -97,28 +146,44 @@ class MainScreen extends React.Component {
     constructor(props){
       super(props);
       this.state = {
-        items: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'],
         dataSource: new ListView.DataSource({
-          rowHasChanged: (row1, row2) => row1 !== row2}).cloneWithRows(['string1', 'string2', 'string3']), 
+          rowHasChanged: (row1, row2) => row1 !== row2}).cloneWithRows(['string1', 'string2', 'string3']),
       };
   }
 
   static navigationOptions = {
     title: 'MealSplit'
   }
-
-  renderRow(items) {
-    return (
-      <Text>{items}</Text>
-    );
+  componentDidMount(){
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    fetch('http://10.2.110.91:3000/contacts', {
+      method: 'GET',
+      credentials: 'include'
+    })
+    .then((resp) => resp.json())
+    .then(respJson => {
+      console.log(respJson)
+      this.setState({
+        dataSource: ds.cloneWithRows(respJson)
+      })
+    })
+    .catch(err=>console.log(err))
   }
+
   render() {
     return (
-      <ListView
-      style={{margin: 40}}
-      dataSource={this.state.dataSource}
-      renderRow={this.renderRow}
-      />
+      <View>
+      {this.state.dataSource?
+    <ListView
+        dataSource={this.state.dataSource}
+        renderRow={(rowData) => (
+          <TouchableOpacity>
+            <Text style={styles.buttonLabel1}>{rowData.username}</Text>
+          </TouchableOpacity>
+        )}
+      />:null}
+
+    </View>
     );
   }
 }
@@ -132,7 +197,7 @@ class MainScreen extends React.Component {
     },
     Login: {
       screen: LoginScreen,
-      
+
     },
     MealSplit: {
       screen: MainScreen,

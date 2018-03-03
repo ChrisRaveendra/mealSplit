@@ -1,8 +1,8 @@
 {
   "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 95412,
-  "expoServerNgrokUrl": "https://dv-c85.reemaukani.mealsplit.exp.direct",
-  "packagerNgrokUrl": "https://packager.dv-c85.reemaukani.mealsplit.exp.direct",
-  "ngrokPid": 95446
+  "packagerPort": 19006,
+  "packagerPid": 4507,
+  "expoServerNgrokUrl": "https://ve-bzv.aliksoyupak.mealsplit.exp.direct",
+  "packagerNgrokUrl": "https://packager.ve-bzv.aliksoyupak.mealsplit.exp.direct",
+  "ngrokPid": 4522
 }
